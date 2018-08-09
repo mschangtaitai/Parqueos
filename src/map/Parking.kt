@@ -13,4 +13,8 @@ class Parking  (
     fun addLevel(level: Level) {
         this.levels.add(level)
     }
+
+    fun deleteLevel(index: Int) {
+        this.levels.removeAt(index)
+    }
 }

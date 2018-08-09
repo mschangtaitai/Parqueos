@@ -2,16 +2,11 @@ package items
 
 import map.*
 class Car (
-    private val name : String = "@",
     private val ID : String,
-    private val space : Space
+    private val name : String = "@"
 ){
     fun getID(): String{
         return ID;
-    }
-
-    fun getSpace(): Space{
-        return space;
     }
 
     fun getName(): String{

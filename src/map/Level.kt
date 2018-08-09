@@ -9,19 +9,59 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class Level (
-       private val name : String,
-       private val width : Int,
-       private val height : Int,
-       private val car : ArrayList<Car> = ArrayList(),
-       private val spaces : ArrayList<Space> = ArrayList(),
-       private val walls : ArrayList<Wall> = ArrayList()
-){
+    private val name : String,
+    private val path : String
+    )
+{
+    private val height : Int
+    private val width : Int
+    private val car : ArrayList<Car> = ArrayList()
+    private val spaces : ArrayList<Space> = ArrayList()
+    private val walls : ArrayList<Wall> = ArrayList()
+    init {
+        val inputLevel = ArrayList<Array<String>>()
+        try {
+            val scan = Scanner(File(path))
+            while (scan.hasNextLine()) {
+                val line = scan.nextLine()
+                inputLevel.add(line.trim { it <= ' ' }.split("".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
+            }
+        } catch (ex: FileNotFoundException) {
+
+        }
+        this.width = inputLevel.get(0).size
+        this.height= inputLevel.size
+
+        for (row in 0 until getHeight()) {
+            for (col in 0 until getWidth()) {
+                val toEvaluate = inputLevel.get(row)[col]
+                when (toEvaluate) {
+                    " " -> {
+                    }
+                    "*" -> {
+                        val myWall = Wall(col, row)
+                        addWall(myWall)
+                    }
+                    "@" -> {
+                        val space = Space(col, row, toEvaluate, false)
+                        addSpace(space)
+
+                    }
+                    else -> {
+                        val space = Space(col, row, toEvaluate, true)
+                        addSpace(space)
+                    }
+                }
+            }
+        }
+    }
+
     fun getName(): String {
         return name
     }
 
     fun getWidth(): Int {
-        return width;
+        return width
     }
 
     fun getHeight(): Int {
@@ -29,7 +69,14 @@ class Level (
     }
 
     fun getCars(): ArrayList<Car> {
-        return car
+        return this.car
+    }
+
+    fun hasCar(car: Car): Boolean {
+        if (this.car.contains(car)){
+            return true
+        }
+        return false
     }
 
     fun getSpace(x: Int, y: Int): Space? {
@@ -40,6 +87,14 @@ class Level (
         }
 
         return null
+    }
+
+    fun addCar(car: Car) {
+        this.car.add(car)
+    }
+
+    fun getSpaces():ArrayList<Space> {
+        return spaces
     }
 
     fun addWall(wall: Wall){
@@ -66,48 +121,6 @@ class Level (
             }
         }
         return false
-    }
-
-    private fun readMap(mapFilePath: String): ArrayList<Array<String>> {
-        val inputLevel = ArrayList<Array<String>>()
-        try {
-            val scan = Scanner(File(mapFilePath))
-            while (scan.hasNextLine()) {
-                val line = scan.nextLine()
-                inputLevel.add(line.trim { it <= ' ' }.split("".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
-            }
-        } catch (ex: FileNotFoundException) {
-
-        }
-
-        return inputLevel
-    }
-
-    fun buildLevel(i: String,inputLevel: ArrayList<String>) {
-        val level = Level(i, inputLevel.get(0).length, inputLevel.size)
-
-        for (row in 0 until level.getHeight()) {
-            for (col in 0 until level.getWidth()) {
-                val toEvaluate = inputLevel.get(row)[col]
-                when (Character.toString(toEvaluate)) {
-                    " " -> {
-                    }
-                    "*" -> {
-                        val myWall = Wall(col, row)
-                        level.addWall(myWall)
-                    }
-                    "@" -> {
-                        val space = Space(col, row, Character.toString(toEvaluate), false, level)
-                        level.addSpace(space)
-
-                    }
-                    else -> {
-                        val space = Space(col, row, Character.toString(toEvaluate), true, level)
-                        level.addSpace(space)
-                    }
-                }
-            }
-        }
     }
 
     override fun toString(): String {

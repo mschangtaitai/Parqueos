@@ -1,18 +1,15 @@
 package map
 
+import items.*
 class Space (
     private val row : Int,
     private val column : Int,
     private val name : String,
     private var available : Boolean = true,
-    private val level : Level
+    private var car : Car? = null
 ){
     fun getName(): String{
         return name;
-    }
-
-    fun isAvaillable(): Boolean{
-        return available;
     }
 
     fun getRow(): Int{
@@ -23,8 +20,8 @@ class Space (
         return column
     }
 
-    fun getLevel(): Level{
-        return level;
+    fun setCar(car: Car) {
+        this.car = car
     }
 
     fun park(): Boolean{
