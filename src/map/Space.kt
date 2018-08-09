@@ -1,10 +1,10 @@
 package map
 
 class Space (
-    private val name : String,
-    private var available : Boolean = true,
     private val row : Int,
     private val column : Int,
+    private val name : String,
+    private var available : Boolean = true,
     private val level : Level
 ){
     fun getName(): String{
@@ -32,4 +32,10 @@ class Space (
         return available;
     }
 
+    override fun toString(): String {
+        if (!available){
+            return "@"
+        }
+        return "" + this.name
+    }
 }
